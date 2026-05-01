@@ -10,7 +10,8 @@ die Anzahl der Mahnungen je Kunde zu begrenzen.
 
 Verwendete Technologien: SQLAlchemy, ReportLab, python-dotenv, requests, smtplib.
 
-Externe Abhängigkeit: REST-Endpunkt https://retoolapi.dev/BnzcNn/data
+Externe Abhängigkeit: REST-Endpunkt
+
 """
 
 import os
@@ -40,6 +41,7 @@ SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 EMAIL_FROM = os.getenv("EMAIL_FROM")
 REMINDER_LIMIT = int(os.getenv("REMINDER_LIMIT", 3))
+API_URL = os.getenv("API_URL")
 
 if not all([DATABASE_URL, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, EMAIL_FROM]):
     raise ValueError("Nicht alle erforderlichen Umgebungsvariablen sind in .env definiert.")
@@ -78,7 +80,7 @@ def generate_invoice_pdf(client: Client) -> bytes:
     """
     Erzeugt eine personalisierte PDF-Mahnung für einen Kunden.
 
-    Die PDF wird im Speicher über `BytesIO` generiert und direkt als Byte-String
+    PDF wird im Speicher über `BytesIO` generiert und direkt als Byte-String
     zurückgegeben – geeignet für den Versand als E-Mail-Anhang.
     """
 
@@ -160,7 +162,7 @@ def sync_with_api():
     Datensätze über `session.merge()` in einer Transaktion. Bei Fehlern wird die
     Ausführung abgebrochen und der Fehler protokolliert.
     """
-    url = "https://retoolapi.dev/BnzcNn/data"
+    url = API_URL
     try:
         response = requests.get(url)
         response.raise_for_status()
