@@ -3,3 +3,7 @@
 __pycache__/
 *.pyc
 main_explanation.py
+.DS_Store
+**/.DS_Store
+.idea/
+**/.idea/
